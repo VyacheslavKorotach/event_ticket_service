@@ -8,13 +8,39 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract EventFactory is Ownable {
     event NewEvent(uint eventId, string name, string symbol);
 
-    ERC721[] public events;
+    // ERC721[] public events;
+    struct userEvent {
+        ERC721 tickets;
+        uint totalTickets;
+        uint ticketPrice;  // in wei
+        string description;
+        string location;
+        string startDate;
+        string endDate;
+    }
+
+    userEvent[] public events;
 
     mapping (uint => address) public eventToOwner;
     mapping (address => uint) ownerEventCount;
 
-    function _createEvent(string memory name_, string memory symbol_) internal {
-        events.push(new ERC721(name_, symbol_));
+    function _createEvent(string memory name_, 
+                          string memory symbol_, 
+                          uint totalTickets, 
+                          uint ticketPrice,
+                          string memory description,
+                          string memory location,
+                          string memory startDate,
+                          string memory endDate) internal {
+        userEvent memory uEvent;
+        uEvent.tickets = new ERC721(name_, symbol_);
+        uEvent.totalTickets = totalTickets;
+        uEvent.ticketPrice = ticketPrice;
+        uEvent.description = description;
+        uEvent.location = location;
+        uEvent.startDate = startDate;
+        uEvent.endDate = endDate;
+        events.push(uEvent);
         uint id = events.length;
         eventToOwner[id] = msg.sender;
         ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
