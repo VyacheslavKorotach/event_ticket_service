@@ -17,6 +17,8 @@ contract EventFactory is Ownable {
         string location;
         string startDate;
         string endDate;
+        uint ticketsSold;
+        bool eventCanceled;
     }
 
     userEvent[] public events;
@@ -24,14 +26,14 @@ contract EventFactory is Ownable {
     mapping (uint => address) public eventToOwner;
     mapping (address => uint) ownerEventCount;
 
-    function _createEvent(string memory name_, 
+    function createEvent(string memory name_, 
                           string memory symbol_, 
                           uint totalTickets, 
                           uint ticketPrice,
                           string memory description,
                           string memory location,
                           string memory startDate,
-                          string memory endDate) internal {
+                          string memory endDate) public {
         userEvent memory uEvent;
         uEvent.tickets = new ERC721(name_, symbol_);
         uEvent.totalTickets = totalTickets;
@@ -40,6 +42,8 @@ contract EventFactory is Ownable {
         uEvent.location = location;
         uEvent.startDate = startDate;
         uEvent.endDate = endDate;
+        uEvent.ticketsSold = uint(0);
+        uEvent.eventCanceled = false;
         events.push(uEvent);
         uint id = events.length;
         eventToOwner[id] = msg.sender;
