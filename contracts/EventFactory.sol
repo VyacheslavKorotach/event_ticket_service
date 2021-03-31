@@ -15,6 +15,20 @@ contract EventFactory {
     uint totalEventCount;
     uint activeEventCount;
 
+    struct eventDetails {
+        string name;
+        string symbol;
+        uint totalTickets;
+        uint ticketPrice;
+        string description;
+        string location;
+        string startDate;
+        string endDate;
+        uint ticketsSold;
+        bool eventCanceled;
+        address eventOwner;
+    }
+
     constructor() {
         totalEventCount = 0;
         activeEventCount = 0;
@@ -75,5 +89,32 @@ contract EventFactory {
             }
         }
         return result;
+    }
+
+    /**
+     * @dev Gets the owner adress of the 'eventId'.
+     */
+    function OwnerOf(uint eventId) public view returns (address) {
+        return eventToOwner[eventId];
+    }
+
+    /**
+     * @dev Gets the structured details of the 'eventId'.
+     */
+    function getEventDetails(uint eventId) external view returns(eventDetails memory) {
+        eventDetails memory details;
+        details.name = events[eventId].name();
+        details.symbol = events[eventId].symbol();
+        details.totalTickets = events[eventId].totalTickets();
+        details.ticketPrice = events[eventId].ticketPrice();
+        details.description = events[eventId].description();
+        details.location = events[eventId].location();
+        details.startDate = events[eventId].startDate();
+        details.endDate = events[eventId].endDate();
+        details.name = events[eventId].name();
+        details.ticketsSold = events[eventId].ticketsSold();
+        details.eventCanceled = events[eventId].isCanceled();
+        details.eventOwner = EventFactory.OwnerOf(eventId);
+        return details;
     }
 }
