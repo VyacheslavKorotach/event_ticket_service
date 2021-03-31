@@ -102,19 +102,19 @@ contract EventFactory {
      * @dev Gets the structured details of the 'eventId'.
      */
     function getEventDetails(uint eventId) external view returns(eventDetails memory) {
+        require(eventId > 0);
         eventDetails memory details;
-        details.name = events[eventId].name();
-        details.symbol = events[eventId].symbol();
-        details.totalTickets = events[eventId].totalTickets();
-        details.ticketPrice = events[eventId].ticketPrice();
-        details.description = events[eventId].description();
-        details.location = events[eventId].location();
-        details.startDate = events[eventId].startDate();
-        details.endDate = events[eventId].endDate();
-        details.name = events[eventId].name();
-        details.ticketsSold = events[eventId].ticketsSold();
-        details.eventCanceled = events[eventId].isCanceled();
-        details.eventOwner = EventFactory.OwnerOf(eventId);
+        details.name = events[eventId-1].name();
+        details.symbol = events[eventId-1].symbol();
+        details.totalTickets = events[eventId-1].totalTickets();
+        details.ticketPrice = events[eventId-1].ticketPrice();
+        details.description = events[eventId-1].description();
+        details.location = events[eventId-1].location();
+        details.startDate = events[eventId-1].startDate();
+        details.endDate = events[eventId-1].endDate();
+        details.ticketsSold = events[eventId-1].ticketsSold();
+        details.eventCanceled = events[eventId-1].isCanceled();
+        details.eventOwner = OwnerOf(eventId);
         return details;
     }
 }
