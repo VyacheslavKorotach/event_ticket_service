@@ -53,19 +53,19 @@ contract UserEvent is Ownable, ERC721 {
         return _ticketPrice;
     }
 
-    function description() public view virtual returns (string) {
+    function description() public view virtual returns (string memory) {
         return _description;
     }
 
-    function location() public view virtual returns (string) {
+    function location() public view virtual returns (string memory) {
         return _location;
     }
 
-    function startDate() public view virtual returns (string) {
+    function startDate() public view virtual returns (string memory) {
         return _startDate;
     }
 
-    function endDate() public view virtual returns (string) {
+    function endDate() public view virtual returns (string memory) {
         return _endDate;
     }
 

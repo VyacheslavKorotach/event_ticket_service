@@ -12,6 +12,13 @@ contract EventFactory {
 
     mapping (uint => address) public eventToOwner;
     mapping (address => uint) ownerEventCount;
+    uint totalEventCount;
+    uint activeEventCount;
+
+    constructor() {
+        totalEventCount = 0;
+        activeEventCount = 0;
+    }
 
     /**
      * @dev Creats new Event.
@@ -33,11 +40,40 @@ contract EventFactory {
             uint id = events.length;
             eventToOwner[id] = msg.sender;
             ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
+            totalEventCount++;
+            activeEventCount++;
             emit NewEventCreated(id, name_, symbol_);
     }
 
+    /**
+     * @dev Cancels the 'eventId' Event.
+     * Task #6 - Organizers can cancel an event they have created.
+     *
+     * Requirements:
+     *
+     * - Only currently active event can be canceled.
+     * - Only the Organizer can cancel the Event.
+     * The conditions are checked in UserEvent cancelEvent(). 
+     */
     function cancelEvent(uint eventId) public {
         events[eventId].cancelEvent();
+        activeEventCount--;
+        emit EventCanceled(eventId);
     }
 
+    /**
+     * @dev Gets the array of the 'eventId'es of the active events.
+     * Task #7 - Search for available events.
+     */
+    function getActiveEvnts() external view returns(uint[] memory) {
+        uint[] memory result = new uint[](activeEventCount);
+        uint counter = 0;
+        for (uint i = 0; i < events.length; i++) {
+            if (!events[i].isCanceled()) {
+                result[counter] = i;
+                counter++;
+            }
+        }
+        return result;
+    }
 }
