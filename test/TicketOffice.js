@@ -26,5 +26,16 @@ contract("TicketOffice", (accounts) => {
         // console.log(result.logs[0]);
     })
 
-    //define the new it() function
+    it("should be able to create a new ticket", async () => {
+        const result = await contractInstance.createNewEvent(
+            eventNames[0], eventSymbols[0], eventTotalTickets[0], eventTicketPrices[0], eventDescriptions[0],
+            eventLocations[0], eventStartDates[0], eventEndDates[0], {from: alice}
+        );
+        const eventId = result.logs[0].args.eventId.toNumber();
+        assert.equal(result.receipt.status, true);
+        assert.equal(result.logs[0].args.name, eventNames[0]);
+        assert.equal(result.logs[0].args.symbol, eventSymbols[0]);
+        console.log(result.logs[0]);
+    })
+
 })
