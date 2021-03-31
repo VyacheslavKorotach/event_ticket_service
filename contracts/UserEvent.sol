@@ -42,9 +42,22 @@ contract UserEvent is Ownable, ERC721 {
         return _ticketsSold;
     }
 
+    /**
+     * @dev Cets money (_ticketPrice) and mint new ticket on the Event to the buyer.
+     * Task #4 - Event participants can buy a ticket to the event.
+     *
+     * Requirements:
+     *
+     * - `_ticketsSold` is less then '_totalTickets'.
+     * - amount of money in transaction is equal to '_ticketPrice'.
+     *
+     * Emits a {Transfer} event.
+     */
     function buyTicket() public virtual payable returns(uint) {
+        require(_ticketsSold < _totalTickets);
         require(msg.value == _ticketPrice);
-        return _mintTicket(msg.sender);
+        uint _ticketId = _mintTicket(msg.sender);
+        return _ticketId;
     }
     
     function _mintTicket(address to_) private returns(uint) {
@@ -52,6 +65,14 @@ contract UserEvent is Ownable, ERC721 {
         return _ticketsSold++;
     }
 
+    /**
+     * @dev Withdraws money (Ether) for the sold tickets to the Event Organizer.
+     * Task #2 - Organizers can sell tickets and accept payments using Ether.
+     *
+     * Requirements:
+     *
+     * - Only the Organizer of event can withdraw money.
+     */
     function withdraw() external onlyOwner {
         address _owner = owner();
         payable(_owner).transfer(address(this).balance);

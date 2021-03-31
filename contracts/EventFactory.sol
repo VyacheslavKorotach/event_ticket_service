@@ -5,13 +5,18 @@ pragma solidity ^0.8.0;
 import "./UserEvent.sol";
 
 contract EventFactory {
-    event NewEvent(uint eventId, string name, string symbol);
+    event NewEventCreated(uint eventId, string name, string symbol);
 
     UserEvent[] public events;
 
     mapping (uint => address) public eventToOwner;
     mapping (address => uint) ownerEventCount;
 
+    /**
+     * @dev Creats new Event.
+     * Task #1 - Event organizers can create events.
+     * Emits a {NewEventCreated} event.
+     */
     function createEvent(
         string memory name_,
         string memory symbol_,
@@ -27,7 +32,7 @@ contract EventFactory {
             uint id = events.length;
             eventToOwner[id] = msg.sender;
             ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
-            emit NewEvent(id, name_, symbol_);
+            emit NewEventCreated(id, name_, symbol_);
         }
 
 }
