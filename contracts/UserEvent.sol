@@ -33,9 +33,40 @@ contract UserEvent is Ownable, ERC721 {
             _ticketsSold = uint(0);
             _eventCanceled = false;
         }
-    
+
+    modifier isActive() {
+        require(!isCanceled(), "Event canceled");
+        _;
+    }
+
+    // Getters block
+
+    function isCanceled() public view returns (bool) {
+        return _eventCanceled == true; 
+    }
+
     function totalTickets() public view virtual returns (uint) {
         return _totalTickets;
+    }
+
+    function ticketPrice() public view virtual returns (uint) {
+        return _ticketPrice;
+    }
+
+    function description() public view virtual returns (string) {
+        return _description;
+    }
+
+    function location() public view virtual returns (string) {
+        return _location;
+    }
+
+    function startDate() public view virtual returns (string) {
+        return _startDate;
+    }
+
+    function endDate() public view virtual returns (string) {
+        return _endDate;
     }
 
     function ticketsSold() public view virtual returns (uint) {
@@ -48,12 +79,13 @@ contract UserEvent is Ownable, ERC721 {
      *
      * Requirements:
      *
+     * - The Event is not canceled.
      * - `_ticketsSold` is less then '_totalTickets'.
      * - amount of money in transaction is equal to '_ticketPrice'.
      *
      * Emits a {Transfer} event.
      */
-    function buyTicket() public virtual payable returns(uint) {
+    function buyTicket() public virtual payable isActive returns(uint) {
         require(_ticketsSold < _totalTickets);
         require(msg.value == _ticketPrice);
         uint _ticketId = _mintTicket(msg.sender);
@@ -76,5 +108,18 @@ contract UserEvent is Ownable, ERC721 {
     function withdraw() external onlyOwner {
         address _owner = owner();
         payable(_owner).transfer(address(this).balance);
+    }
+
+    /**
+     * @dev Marks the Event as 'canceled'.
+     * Task #6 - Organizers can cancel an event they have created.
+     *
+     * Requirements:
+     *
+     * - Only currently active event can be canceled.
+     * - Only the Organizer can cancel the Event.
+     */
+    function cancelEvent() public isActive onlyOwner {
+        _eventCanceled = true;
     }
 }

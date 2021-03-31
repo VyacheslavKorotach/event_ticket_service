@@ -13,7 +13,7 @@ contract TicketOffice is EventFactory {
      * Emits a {NewTicketSold} event.
      * Returns ticketId.
      */
-    function buyTicket(uint eventId) public returns (uint) {
+    function buyTicket(uint eventId) external returns (uint) {
         uint _ticketId = events[eventId].buyTicket();
         emit NewTicketSold(eventId, _ticketId, msg.sender);
         return _ticketId;
@@ -23,7 +23,7 @@ contract TicketOffice is EventFactory {
      * @dev Returns true if in the 'eventId' exists the 'ticketId' owned by the 'owner'.
      * Task #3 - Organizers can validate user tickets.
      */
-    function checkTicket(uint eventId, uint tickedId, address owner) public view returns (bool) {
+    function checkTicket(uint eventId, uint tickedId, address owner) external view returns (bool) {
         require(events[eventId].ownerOf(tickedId) == owner);
         return true;
     }
@@ -37,7 +37,7 @@ contract TicketOffice is EventFactory {
      * - Only the owner or approved person can transfer the ticketId. 
      *   The restrictions realised in OpenZeppelin ERC721.sol (transferFrom)
      */
-    function ticketTransfer(uint eventId, uint tickedId, address to_) public returns (bool) {
+    function ticketTransfer(uint eventId, uint tickedId, address to_) external returns (bool) {
         events[eventId].transferFrom(msg.sender, to_, tickedId);
         return true;
     }

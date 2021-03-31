@@ -6,6 +6,7 @@ import "./UserEvent.sol";
 
 contract EventFactory {
     event NewEventCreated(uint eventId, string name, string symbol);
+    event EventCanceled(uint eventId);
 
     UserEvent[] public events;
 
@@ -33,6 +34,10 @@ contract EventFactory {
             eventToOwner[id] = msg.sender;
             ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
             emit NewEventCreated(id, name_, symbol_);
-        }
+    }
+
+    function cancelEvent(uint eventId) public {
+        events[eventId].cancelEvent();
+    }
 
 }
