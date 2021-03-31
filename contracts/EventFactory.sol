@@ -39,7 +39,7 @@ contract EventFactory {
      * Task #1 - Event organizers can create events.
      * Emits a {NewEventCreated} event.
      */
-    function createEvent(
+    function createNewEvent(
         string memory name_,
         string memory symbol_,
         uint totalTickets_,
