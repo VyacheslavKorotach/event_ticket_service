@@ -28,4 +28,17 @@ contract TicketOffice is EventFactory {
         return true;
     }
 
+    /**
+     * @dev Transfers the 'ticketId' to the new owner to his Etherium address 'to_'.
+     * Task #5 - The ticket can be transferred from one user to another using an ether account.
+     *
+     * Requirements:
+     *
+     * - Only the owner or approved person can transfer the ticketId. 
+     *   The restrictions realised in OpenZeppelin ERC721.sol (transferFrom)
+     */
+    function ticketTransfer(uint eventId, uint tickedId, address to_) public returns (bool) {
+        events[eventId].transferFrom(msg.sender, to_, tickedId);
+        return true;
+    }
 }
