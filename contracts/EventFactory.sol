@@ -4,35 +4,12 @@ pragma solidity ^0.8.0;
 
 import "./UserEvent.sol";
 
-contract EventFactory {
-    event NewEventCreated(uint eventId, string name, string symbol);
+contract EventFactory is UserEvent {
+    event NewEventCreated(uint eventId, string name);
     event EventCanceled(uint eventId);
-
-    UserEvent[] public events;
 
     mapping (uint => address) public eventToOwner;
     mapping (address => uint) ownerEventCount;
-    uint totalEventCount;
-    uint activeEventCount;
-
-    struct eventDetails {
-        string name;
-        string symbol;
-        uint totalTickets;
-        uint ticketPrice;
-        string description;
-        string location;
-        string startDate;
-        string endDate;
-        uint ticketsSold;
-        bool eventCanceled;
-        address eventOwner;
-    }
-
-    constructor() {
-        totalEventCount = 0;
-        activeEventCount = 0;
-    }
 
     /**
      * @dev Creats new Event.
@@ -41,36 +18,43 @@ contract EventFactory {
      */
     function createNewEvent(
         string memory name_,
-        string memory symbol_,
-        uint totalTickets_,
-        uint ticketPrice_,
         string memory description_,
         string memory location_,
         string memory startDate_,
-        string memory endDate_) public {
-            UserEvent uEvent = new UserEvent(
-                name_, symbol_, totalTickets_, ticketPrice_, description_, location_, startDate_, endDate_); 
-            events.push(uEvent);
+        string memory endDate_,
+        uint ticketPrice_,    
+        uint totalTickets_) public {
+            events.push(eventDetails(
+                name_, description_, location_, startDate_, endDate_,
+                totalTickets_, ticketPrice_, totalTickets_, 0, false)); 
             uint id = events.length;
             eventToOwner[id] = msg.sender;
             ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
             totalEventCount++;
             activeEventCount++;
-            emit NewEventCreated(id, name_, symbol_);
+            emit NewEventCreated(id, name_);
     }
 
     /**
-     * @dev Cancels the 'eventId' Event.
+     * @dev Gets the owner adress of the 'eventId'.
+     */
+    function eventOwnerOf(uint eventId) public view returns (address) {
+        return eventToOwner[eventId];
+    }
+
+    /**
+     * @dev Marks the Event as 'canceled'.
      * Task #6 - Organizers can cancel an event they have created.
      *
      * Requirements:
      *
      * - Only currently active event can be canceled.
      * - Only the Organizer can cancel the Event.
-     * The conditions are checked in UserEvent cancelEvent(). 
      */
-    function cancelEvent(uint eventId) public {
-        events[eventId].cancelEvent();
+    function cancelEvent(eventId) public {
+        require(!isCanceled(eventId));
+        require(eventOwnerOf(eventId) == msg.sender);
+        events[eventId].eventCanceled = true;
         activeEventCount--;
         emit EventCanceled(eventId);
     }
@@ -89,32 +73,5 @@ contract EventFactory {
             }
         }
         return result;
-    }
-
-    /**
-     * @dev Gets the owner adress of the 'eventId'.
-     */
-    function OwnerOf(uint eventId) public view returns (address) {
-        return eventToOwner[eventId];
-    }
-
-    /**
-     * @dev Gets the structured details of the 'eventId'.
-     */
-    function getEventDetails(uint eventId) external view returns(eventDetails memory) {
-        require(eventId > 0);
-        eventDetails memory details;
-        details.name = events[eventId-1].name();
-        details.symbol = events[eventId-1].symbol();
-        details.totalTickets = events[eventId-1].totalTickets();
-        details.ticketPrice = events[eventId-1].ticketPrice();
-        details.description = events[eventId-1].description();
-        details.location = events[eventId-1].location();
-        details.startDate = events[eventId-1].startDate();
-        details.endDate = events[eventId-1].endDate();
-        details.ticketsSold = events[eventId-1].ticketsSold();
-        details.eventCanceled = events[eventId-1].isCanceled();
-        details.eventOwner = OwnerOf(eventId);
-        return details;
     }
 }

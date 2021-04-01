@@ -44,13 +44,22 @@ contract("TicketOffice", (accounts) => {
             eventLocations[0], eventStartDates[0], eventEndDates[0], {from: alice}
         );
         const result2 = await contractInstance.getEventDetails("1", {from: alice} );
-        // const eventId = result.logs[0].args.eventId.toNumber();
-        console.log(result2);
         assert.equal(result.receipt.status, true);
-        assert.equal(result2.receipt.status, true);
+        assert.equal(result2.name, eventNames[0]);
+    })
+
+    it("should be able to buy the ticket", async () => {
+        const result = await contractInstance.createNewEvent(
+            eventNames[0], eventSymbols[0], eventTotalTickets[0], eventTicketPrices[0], eventDescriptions[0],
+            eventLocations[0], eventStartDates[0], eventEndDates[0], {from: alice}
+        );
+        const result3 = await contractInstance.buyTicket("1", {from: bob} )
         // assert.equal(result.logs[0].args.name, eventNames[0]);
         // assert.equal(result.logs[0].args.symbol, eventSymbols[0]);
-        // console.log(result2);
+        console.log(result3);
+        assert.equal(result.receipt.status, true);
+        // assert.equal(result.logs[0].args.name, eventNames[0]);
+        // assert.equal(result.logs[0].args.symbol, eventSymbols[0]);
     })
 
 })
