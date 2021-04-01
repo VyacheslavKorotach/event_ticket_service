@@ -24,9 +24,10 @@ contract EventFactory is UserEvent {
         string memory endDate_,
         uint ticketPrice_,    
         uint totalTickets_) public {
-            events.push(eventDetails(
-                name_, description_, location_, startDate_, endDate_,
-                totalTickets_, ticketPrice_, totalTickets_, 0, false)); 
+            events.push(
+                eventDetails(name_, description_, location_, startDate_, endDate_,
+                ticketPrice_, totalTickets_, 0, false)
+            ); 
             uint id = events.length;
             eventToOwner[id] = msg.sender;
             ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
@@ -51,7 +52,7 @@ contract EventFactory is UserEvent {
      * - Only currently active event can be canceled.
      * - Only the Organizer can cancel the Event.
      */
-    function cancelEvent(eventId) public {
+    function cancelEvent(uint eventId) public {
         require(!isCanceled(eventId));
         require(eventOwnerOf(eventId) == msg.sender);
         events[eventId].eventCanceled = true;
@@ -67,7 +68,7 @@ contract EventFactory is UserEvent {
         uint[] memory result = new uint[](activeEventCount);
         uint counter = 0;
         for (uint i = 0; i < events.length; i++) {
-            if (!events[i].isCanceled()) {
+            if (!isCanceled(i)) {
                 result[counter] = i;
                 counter++;
             }

@@ -10,6 +10,7 @@ contract TicketOffice is EventFactory {
     event TicketTransfered(uint ticketId, address to);
 
     mapping (uint => uint) public ticketToEvent;
+    mapping (address => uint) public balances; // Here are the balances of collected money for the solved tickets
 
     /**
      * @dev Gets money 'ticketPrice' and mint new ticket on the Event 'eventId' to the buyer 'to'.
@@ -23,30 +24,31 @@ contract TicketOffice is EventFactory {
      *
      * Emits a {Transfer} event.
      */
-    function buyTicket(eventId) public virtual payable returns(uint) {
+    function buyTicket(uint eventId) public virtual payable returns(uint) {
         require(!isCanceled(eventId), "Event Canceled");
-        require(ticketsSold(eventId) < totalTickets(), "All tickets are sold");
+        require(ticketsSold(eventId) < totalTickets(eventId), "All tickets are sold");
         require(msg.value == ticketPrice(eventId), "The ticket price is wrong");
+        balances[eventOwnerOf(eventId)] += msg.value;
         uint ticketId = totalTicketCount++;
         _mint(msg.sender, ticketId);
-        ticketToEvent.ticketId = eventId;
-        return tickedId;
+        ticketToEvent[ticketId] = eventId;
+        return ticketId;
     }
 
     /**
      * @dev Gets the owner adress of the 'ticketId'.
      */
     function ticketOwnerOf(uint ticketId) public view returns (address) {
-        return ownerOf(tickedId);
+        return ownerOf(ticketId);
     }
 
     /**
      * @dev Returns true if the 'ticketId' owned by the 'owner' and 'tickedId' issued to 'eventId'
      * Task #3 - Organizers can validate user tickets.
      */
-    function checkTicket(uint eventId, uint tickedId, address owner) external view returns (bool) {
+    function checkTicket(uint eventId, uint ticketId, address owner) external view returns (bool) {
         require(ticketOwnerOf(ticketId) == owner);
-        require(ticketToEvent.ticketId == eventId);
+        require(ticketToEvent[ticketId] == eventId);
         return true;
     }
 
@@ -59,21 +61,24 @@ contract TicketOffice is EventFactory {
      * - Only the owner or approved person can transfer the ticketId. 
      *   The restrictions realised in OpenZeppelin ERC721.sol (transferFrom)
      */
-    function ticketTransfer(uint eventId, uint tickedId, address to_) external returns (bool) {
-        events[eventId].transferFrom(msg.sender, to_, tickedId);
+    function ticketTransfer(uint tickedId, address to_) external returns (bool) {
+        transferFrom(msg.sender, to_, tickedId);
         return true;
     }
 
     /**
-     * @dev Withdraws money (Ether) for the sold tickets to the Event Organizer.
+     * @dev Withdraws money (Ether) for the sold 'eventId' tickets to the 'eventId' Organizer.
      * Task #2 - Organizers can sell tickets and accept payments using Ether.
      *
      * Requirements:
      *
      * - Only the Organizer of event can withdraw money.
      */
-    function withdraw() external onlyOwner {
-        address _owner = owner();
-        payable(_owner).transfer(address(this).balance);
+    function withdraw(uint eventId) external {
+        require(eventOwnerOf(eventId) == msg.sender);
+        require(balances[msg.sender] > 0);
+        uint amount = balances[msg.sender];
+        balances[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
     }
 }
