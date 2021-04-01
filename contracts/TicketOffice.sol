@@ -76,8 +76,8 @@ contract TicketOffice is EventFactory {
      * - Only the Organizer of event can withdraw money.
      */
     function withdraw(uint eventId) external {
-        require(eventOwnerOf(eventId) == msg.sender);
-        require(balances[msg.sender] > 0);
+        require(eventOwnerOf(eventId) == msg.sender, "Only Organiser of the event cat withdraw money");
+        require(balances[msg.sender] > 0, "Your balance is zero");
         uint amount = balances[msg.sender];
         balances[msg.sender] -= amount;
         payable(msg.sender).transfer(amount);

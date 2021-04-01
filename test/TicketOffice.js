@@ -1,5 +1,5 @@
 const TicketOffice = artifacts.require("TicketOffice");
-// const utils = require("./helpers/utils");
+const utils = require("./helpers/utils");
 const eventNames = ["Event 1", "Event 2"];
 const eventTotalTickets = ["100", "200"];
 const eventTicketPrices = ["10000000000000000", "20000000000000000"];
@@ -25,37 +25,58 @@ contract("TicketOffice", (accounts) => {
     })
 
     it("should be able to get the event details", async () => {
-        const result = await contractInstance.createNewEvent(
+        await contractInstance.createNewEvent(
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
         const result2 = await contractInstance.getEventDetails("1", {from: alice} );
-        assert.equal(result.receipt.status, true);
         assert.equal(result2.name, eventNames[0]);
         // console.log(result2);
     })
 
     it("should be able to buy the ticket", async () => {
-        const result = await contractInstance.createNewEvent(
+        await contractInstance.createNewEvent(
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
         const result3 = await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-        assert.equal(result.receipt.status, true);
         assert.equal(result3.receipt.status, true);
     })
 
     it("should be able to validate user tickets", async () => {
-        const result = await contractInstance.createNewEvent(
+        await contractInstance.createNewEvent(
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
-        const result3 = await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+        await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
         const result5 = await contractInstance.checkTicket("1", "1", bob, {from: alice})
-        assert.equal(result.receipt.status, true);
-        assert.equal(result3.receipt.status, true);
-        assert.equal(result5.receipt.status, true);
+        assert.equal(result5, true);
         // console.log(result5);
     })
 
+    context("should be able to withdrow ETH for the sold tickets", async () => {
+        it("owner should be might withdrow ETH", async () => {
+            const result = await contractInstance.createNewEvent(
+                eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+                eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+            );
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            const result7 = await contractInstance.withdraw("1", {from: alice})
+            assert.equal(result7.receipt.status, true);
+            // console.log(result7);
+        })
+
+        it("3-d person should not be might withdrow ETH", async () => {
+            await contractInstance.createNewEvent(
+                eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+                eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+            );
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await utils.shouldThrow(contractInstance.withdraw("1", {from: bob}))
+            assert.equal(result.receipt.status, true);
+            assert.equal(result3.receipt.status, true);
+        })
+    })
 })
