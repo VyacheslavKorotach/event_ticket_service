@@ -54,9 +54,9 @@ contract("TicketOffice", (accounts) => {
         // console.log(result5);
     })
 
-    context("should be able to withdrow ETH for the sold tickets", async () => {
-        it("owner should be might withdrow ETH", async () => {
-            const result = await contractInstance.createNewEvent(
+    context("should be able to withdraw ETH for the sold tickets", async () => {
+        it("owner should be might withdraw ETH", async () => {
+            await contractInstance.createNewEvent(
                 eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
                 eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
             );
@@ -67,7 +67,7 @@ contract("TicketOffice", (accounts) => {
             // console.log(result7);
         })
 
-        it("3-d person should not be might withdrow ETH", async () => {
+        it("3-d person should not be might withdraw ETH", async () => {
             await contractInstance.createNewEvent(
                 eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
                 eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
@@ -75,8 +75,52 @@ contract("TicketOffice", (accounts) => {
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await utils.shouldThrow(contractInstance.withdraw("1", {from: bob}))
-            assert.equal(result.receipt.status, true);
-            assert.equal(result3.receipt.status, true);
         })
+
+        it("second withdrawal at row should be throwed", async () => {
+            await contractInstance.createNewEvent(
+                eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+                eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+            );
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await contractInstance.withdraw("1", {from: alice})
+            await utils.shouldThrow(contractInstance.withdraw("1", {from: alice}))
+        })
+    })
+
+    context("should be able to transfer tickets to the new owner", async () => {
+        it("owner should be might transfer the ticket", async () => {
+            await contractInstance.createNewEvent(
+                eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+                eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+            );
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            const result7 = await contractInstance.ticketTransfer("1", alice,  {from: bob})
+            assert.equal(result7.receipt.status, true);
+            // console.log(result7);
+        })
+
+        it("3-d person should not be might transfer the ticket", async () => {
+            await contractInstance.createNewEvent(
+                eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+                eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+            );
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+            await utils.shouldThrow(contractInstance.ticketTransfer("1", bob,  {from: alice}))
+            const result2 = await contractInstance.getEventDetails("1", {from: alice} );
+            console.log(result2);
+        })
+    })
+
+    it("Organizers can cancel an event they have created", async () => {
+        await contractInstance.createNewEvent(
+            eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+            eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+        );
+        // await utils.shouldThrow(contractInstance.cancelEvent("1", {from: bob}))
+        await contractInstance.cancelEvent("1", {from: alice});
     })
 })

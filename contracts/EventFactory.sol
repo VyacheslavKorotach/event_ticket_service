@@ -10,6 +10,7 @@ contract EventFactory is UserEvent {
 
     mapping (uint => address) public eventToOwner;
     mapping (address => uint) ownerEventCount;
+    // mapping (uint => bool) EventCanceled;  // There are canceled events only
 
     /**
      * @dev Creats new Event.
@@ -53,9 +54,10 @@ contract EventFactory is UserEvent {
      * - Only the Organizer can cancel the Event.
      */
     function cancelEvent(uint eventId) public {
-        require(!isCanceled(eventId));
-        require(eventOwnerOf(eventId) == msg.sender);
-        events[eventId].eventCanceled = true;
+        require(!isCanceled(eventId), "The event already canceled");
+        require(eventOwnerOf(eventId) == msg.sender, "You are not the owner of the event");
+        eventDetails storage myEvent = events[eventId];
+        myEvent.eventCanceled = true;
         activeEventCount--;
         emit EventCanceled(eventId);
     }

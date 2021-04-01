@@ -24,7 +24,7 @@ contract TicketOffice is EventFactory {
      *
      * Emits a {Transfer} event.
      */
-    function buyTicket(uint eventId) public virtual payable returns(uint) {
+    function buyTicket(uint eventId) external payable returns(uint) {
         require(!isCanceled(eventId), "Event Canceled");
         require(ticketsSold(eventId) < totalTickets(eventId), "All tickets are sold");
         require(msg.value == ticketPrice(eventId), "The ticket price is wrong");
@@ -32,6 +32,9 @@ contract TicketOffice is EventFactory {
         totalTicketCount++;
         uint ticketId = totalTicketCount;
         _mint(msg.sender, ticketId);
+        // eventDetails storage myEvent = events[eventId];
+        // myEvent.ticketsSold++;
+        // events[eventId].ticketsSold++;
         ticketToEvent[ticketId] = eventId;
         return ticketId;
     }
