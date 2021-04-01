@@ -29,7 +29,8 @@ contract TicketOffice is EventFactory {
         require(ticketsSold(eventId) < totalTickets(eventId), "All tickets are sold");
         require(msg.value == ticketPrice(eventId), "The ticket price is wrong");
         balances[eventOwnerOf(eventId)] += msg.value;
-        uint ticketId = totalTicketCount++;
+        totalTicketCount++;
+        uint ticketId = totalTicketCount;
         _mint(msg.sender, ticketId);
         ticketToEvent[ticketId] = eventId;
         return ticketId;

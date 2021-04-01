@@ -76,7 +76,8 @@ contract UserEvent is ERC721 {
 
     function incTicketsSold(uint eventId) internal returns (uint) {
         require(eventId > 0);
-        return events[eventId-1].ticketsSold++;
+        events[eventId-1].ticketsSold++;
+        return events[eventId-1].ticketsSold;
     }
 
     /**

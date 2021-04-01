@@ -30,7 +30,7 @@ contract EventFactory is UserEvent {
             ); 
             uint id = events.length;
             eventToOwner[id] = msg.sender;
-            ownerEventCount[msg.sender] = ownerEventCount[msg.sender]++;
+            ownerEventCount[msg.sender]++;
             totalEventCount++;
             activeEventCount++;
             emit NewEventCreated(id, name_);
@@ -69,6 +69,22 @@ contract EventFactory is UserEvent {
         uint counter = 0;
         for (uint i = 0; i < events.length; i++) {
             if (!isCanceled(i)) {
+                result[counter] = i;
+                counter++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @dev Gets the array of the 'eventId'es owned by the 'owner'.
+     * Task #7 - Search for available events.
+     */
+    function getOwnerEvents(address owner) external view returns(uint[] memory) {
+        uint[] memory result = new uint[](ownerEventCount[owner]);
+        uint counter = 0;
+        for (uint i = 0; i < events.length; i++) {
+            if (eventToOwner[i] == owner) {
                 result[counter] = i;
                 counter++;
             }
