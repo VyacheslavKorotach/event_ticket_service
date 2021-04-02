@@ -70,9 +70,9 @@ contract UserEvent is ERC721 {
         return events[eventId-1].ticketsSold;
     }
 
-    function isCanceled(uint eventId) public view returns (bool) {
+    function isCanceled(uint eventId) public view virtual returns (bool) {
         require(eventId > 0);
-        return events[eventId-1].eventCanceled == true; 
+        return (events[eventId-1].eventCanceled == true); 
     }
 
     function incTicketsSold(uint eventId) internal returns (uint) {

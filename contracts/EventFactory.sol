@@ -72,7 +72,7 @@ contract EventFactory is UserEvent {
     function getActiveEvnts() external view returns(uint[] memory) {
         uint[] memory result = new uint[](activeEventCount);
         uint counter = 0;
-        for (uint i = 0; i < events.length; i++) {
+        for (uint i = 1; i < events.length; i++) {
             if (!isCanceled(i)) {
                 result[counter] = i;
                 counter++;

@@ -131,4 +131,16 @@ contract("TicketOffice", (accounts) => {
         const result = await contractInstance.getEventDetails("1", {from: alice} );
         assert.equal(result.eventCanceled, true);
     })
+
+    it("should be able to get the active event list", async () => {
+        await contractInstance.createNewEvent(
+            eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+            eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+        );
+        await contractInstance.createNewEvent(
+            eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+            eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: bob}
+        );
+        await contractInstance.getActiveEvnts( {from: alice} );
+    })
 })

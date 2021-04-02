@@ -1,0 +1,8 @@
+Event Office Use Cases
+- To get access to all services related to 
+Event organizer created event.
+- clicks on create event button which will direct him/her to the event creation page.
+- user fills required fields about the event (event name, description, location, total available tickets, ticket price in ether, start & end dates)
+- user submits the form.
+- metamask modal will popup and prompt the user to confirm the transaction and pay the required gas fees.
+- after the user confirms the metamask dialog, Event is created and ready to sell tickets.
