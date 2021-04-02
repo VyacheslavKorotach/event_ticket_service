@@ -1,8 +1,73 @@
-Event Office Use Cases
-- To get access to all services related to 
+Event Services Use Cases
+- To get access to all services related to the management of events Event Organizer (or another user) chooses the Event Service Tab.
+
 Event organizer created event.
-- clicks on create event button which will direct him/her to the event creation page.
 - user fills required fields about the event (event name, description, location, total available tickets, ticket price in ether, start & end dates)
+- user fills required fields about the Public and Private keys of the Event Organiser.
 - user submits the form.
-- metamask modal will popup and prompt the user to confirm the transaction and pay the required gas fees.
-- after the user confirms the metamask dialog, Event is created and ready to sell tickets.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him the Event is created and ready to sell tickets.
+
+Event organizer gets the list of his event.
+- user fills required fields about the Public and Private keys of the Event Organiser.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the Event list created from his account.
+
+Event organizer cancels the event.
+- user fills the required field about the Id of the event.
+- user fills required fields about the Public and Private keys of the Event Organiser.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the Event is canceled.
+
+User gets the Event details.
+- user fills the required field about the Id of the event.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the details of the transaction.
+
+User gets the active events list.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the list of the active events.
+
+Ticket Office Use Cases
+- To get access to all services related to the management of tickets user chooses the Ticket Office Tab.
+
+User buys the ticket.
+- user fills required fields about the Id of the event and ticket price.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the ticket is bought.
+
+User checks the ticket.
+- user fills required fields about the event Id and the ticket Id.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the ticket is verified.
+
+User transfers the ticket.
+- user fills required fields about the ticket Id and address where the ticket should be sent.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the ticket is transferred.
+
+User gets the owner of the ticket.
+- user fills required fields about the ticket Id.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the owner of the ticket.
+
+Event Organizer withdraws the money for the tickets that have been sold.
+- user fills required fields about the event Id.
+- user fills required fields about his valid Public and Private keys.
+- user submits the form.
+- while a transaction is in process user sees the pop-up that informs him about waiting until the transaction is complete. 
+- after a transaction is complete the user gets a pop-up that informs him about the money withdrawn.
