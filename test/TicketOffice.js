@@ -15,12 +15,18 @@ contract("TicketOffice", (accounts) => {
     });
 
     it("should be able to create a new event", async () => {
-        const result = await contractInstance.createNewEvent(
+        const result1 = await contractInstance.createNewEvent(
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
-        assert.equal(result.receipt.status, true);
-        assert.equal(result.logs[0].args.name, eventNames[0]);
+        const result2 = await contractInstance.createNewEvent(
+            eventNames[1], eventDescriptions[1], eventLocations[1], eventStartDates[1],
+            eventEndDates[1], eventTicketPrices[1], eventTotalTickets[1], {from: bob}
+        );
+        assert.equal(result1.receipt.status, true);
+        assert.equal(result2.receipt.status, true);
+        assert.equal(result1.logs[0].args.name, eventNames[0]);
+        assert.equal(result2.logs[0].args.name, eventNames[1]);
         // console.log(result.logs[0].args);
     })
 
@@ -29,8 +35,8 @@ contract("TicketOffice", (accounts) => {
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
-        const result2 = await contractInstance.getEventDetails("1", {from: alice} );
-        assert.equal(result2.name, eventNames[0]);
+        const result = await contractInstance.getEventDetails("1", {from: alice} );
+        assert.equal(result.name, eventNames[0]);
         // console.log(result2);
     })
 
@@ -39,8 +45,8 @@ contract("TicketOffice", (accounts) => {
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
-        const result3 = await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-        assert.equal(result3.receipt.status, true);
+        const result = await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
+        assert.equal(result.receipt.status, true);
     })
 
     it("should be able to validate user tickets", async () => {
@@ -49,8 +55,8 @@ contract("TicketOffice", (accounts) => {
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
         await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-        const result5 = await contractInstance.checkTicket("1", "1", bob, {from: alice})
-        assert.equal(result5, true);
+        const result = await contractInstance.checkTicket("1", "1", bob, {from: alice})
+        assert.equal(result, true);
         // console.log(result5);
     })
 
@@ -62,8 +68,8 @@ contract("TicketOffice", (accounts) => {
             );
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-            const result7 = await contractInstance.withdraw("1", {from: alice})
-            assert.equal(result7.receipt.status, true);
+            const result = await contractInstance.withdraw("1", {from: alice})
+            assert.equal(result.receipt.status, true);
             // console.log(result7);
         })
 
@@ -97,8 +103,8 @@ contract("TicketOffice", (accounts) => {
             );
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-            const result7 = await contractInstance.ticketTransfer("1", alice,  {from: bob})
-            assert.equal(result7.receipt.status, true);
+            const result = await contractInstance.ticketTransfer("1", alice,  {from: bob})
+            assert.equal(result.receipt.status, true);
             // console.log(result7);
         })
 
@@ -110,8 +116,8 @@ contract("TicketOffice", (accounts) => {
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await utils.shouldThrow(contractInstance.ticketTransfer("1", bob,  {from: alice}))
-            const result2 = await contractInstance.getEventDetails("1", {from: alice} );
-            console.log(result2);
+            // const result = await contractInstance.getEventDetails("1", {from: alice} );
+            // console.log(result);
         })
     })
 
@@ -122,5 +128,7 @@ contract("TicketOffice", (accounts) => {
         );
         // await utils.shouldThrow(contractInstance.cancelEvent("1", {from: bob}))
         await contractInstance.cancelEvent("1", {from: alice});
+        const result = await contractInstance.getEventDetails("1", {from: alice} );
+        assert.equal(result.eventCanceled, true);
     })
 })

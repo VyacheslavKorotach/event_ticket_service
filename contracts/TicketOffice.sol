@@ -35,6 +35,7 @@ contract TicketOffice is EventFactory {
         // eventDetails storage myEvent = events[eventId];
         // myEvent.ticketsSold++;
         // events[eventId].ticketsSold++;
+        incTicketsSold(eventId);
         ticketToEvent[ticketId] = eventId;
         return ticketId;
     }
@@ -79,7 +80,7 @@ contract TicketOffice is EventFactory {
      * - Only the Organizer of event can withdraw money.
      */
     function withdraw(uint eventId) external {
-        require(eventOwnerOf(eventId) == msg.sender, "Only Organiser of the event cat withdraw money");
+        require(eventOwnerOf(eventId) == msg.sender, "Only Organiser of the event might withdraw money");
         require(balances[msg.sender] > 0, "Your balance is zero");
         uint amount = balances[msg.sender];
         balances[msg.sender] -= amount;

@@ -24,7 +24,7 @@ contract EventFactory is UserEvent {
         string memory startDate_,
         string memory endDate_,
         uint ticketPrice_,    
-        uint totalTickets_) public {
+        uint totalTickets_) public returns (uint) {
             events.push(
                 eventDetails(name_, description_, location_, startDate_, endDate_,
                 ticketPrice_, totalTickets_, 0, false)
@@ -35,6 +35,7 @@ contract EventFactory is UserEvent {
             totalEventCount++;
             activeEventCount++;
             emit NewEventCreated(id, name_);
+            return (id);
     }
 
     /**
@@ -54,10 +55,12 @@ contract EventFactory is UserEvent {
      * - Only the Organizer can cancel the Event.
      */
     function cancelEvent(uint eventId) public {
+        require(eventId > 0, "Wrong eventId");
         require(!isCanceled(eventId), "The event already canceled");
         require(eventOwnerOf(eventId) == msg.sender, "You are not the owner of the event");
-        eventDetails storage myEvent = events[eventId];
-        myEvent.eventCanceled = true;
+        // eventDetails storage myEvent = events[eventId];
+        // myEvent.eventCanceled = true;
+        events[eventId-1].eventCanceled = true;
         activeEventCount--;
         emit EventCanceled(eventId);
     }

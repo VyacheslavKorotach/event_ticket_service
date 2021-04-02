@@ -32,6 +32,7 @@ contract UserEvent is ERC721 {
     function name(uint eventId) public view virtual returns (string memory) {
         require(eventId > 0);
         return events[eventId-1].name;
+        // return events[eventId].name;
     }
 
     function description(uint eventId) public view virtual returns (string memory) {
@@ -84,7 +85,7 @@ contract UserEvent is ERC721 {
      * @dev Gets the structured details of the 'eventId'.
      */
     function getEventDetails(uint eventId) external view returns(eventDetails memory) {
-        require(eventId > 0);
+        // require(eventId > 0);
         eventDetails memory details;
         details.name = name(eventId);
         details.description = description(eventId);
