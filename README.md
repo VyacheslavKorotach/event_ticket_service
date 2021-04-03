@@ -8,3 +8,5 @@ The web application has been deployed to the AWS C2 Instance and can be accessed
 The Use Cases are in the docs folder
 
 The tests are in the tests folder
+
+Connection to metamask and more convenient front is under development
