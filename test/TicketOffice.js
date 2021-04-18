@@ -141,6 +141,6 @@ contract("TicketOffice", (accounts) => {
             eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: bob}
         );
-        await contractInstance.getActiveEvnts( {from: alice} );
+        await contractInstance.getActiveEvents( {from: alice} );
     })
 })

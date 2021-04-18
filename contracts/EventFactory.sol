@@ -69,10 +69,10 @@ contract EventFactory is UserEvent {
      * @dev Gets the array of the 'eventId'es of the active events.
      * Task #7 - Search for available events.
      */
-    function getActiveEvnts() external view returns(uint[] memory) {
+    function getActiveEvents() external view returns(uint[] memory) {
         uint[] memory result = new uint[](activeEventCount);
         uint counter = 0;
-        for (uint i = 1; i < events.length; i++) {
+        for (uint i = 1; i <= events.length; i++) {
             if (!isCanceled(i)) {
                 result[counter] = i;
                 counter++;
@@ -88,7 +88,7 @@ contract EventFactory is UserEvent {
     function getOwnerEvents(address owner) external view returns(uint[] memory) {
         uint[] memory result = new uint[](ownerEventCount[owner]);
         uint counter = 0;
-        for (uint i = 0; i < events.length; i++) {
+        for (uint i = 1; i <= events.length; i++) {
             if (eventToOwner[i] == owner) {
                 result[counter] = i;
                 counter++;

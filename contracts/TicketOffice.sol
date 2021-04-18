@@ -86,4 +86,20 @@ contract TicketOffice is EventFactory {
         balances[msg.sender] -= amount;
         payable(msg.sender).transfer(amount);
     }
+
+    /**
+     * @dev Gets the array of the 'ticketId'es owned by the 'owner'.
+     */
+    function getOwnerTickets(address owner) external view returns(uint[] memory) {
+        uint[] memory result = new uint[](balanceOf(owner));
+        uint counter = 0;
+        for (uint i = 1; i <= totalTicketCount; i++) {
+            if (ownerOf(i) == owner) {
+                result[counter] = i;
+                counter++;
+            }
+        }
+        return result;
+    }
+}
 }
