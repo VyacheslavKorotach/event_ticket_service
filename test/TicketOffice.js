@@ -126,8 +126,18 @@ contract("TicketOffice", (accounts) => {
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             await contractInstance.ticketTransfer("1", alice,  {from: bob})
             const result = await contractInstance.getOwnerTickets(alice,  {from: bob})
-            console.log(String(result[0]));
             assert.equal(String(result[0]), "1");
+        })
+
+        it("owner should be able to get the msg.sender earned balance", async () => {
+            await contractInstance.createNewEvent(
+                eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
+                eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
+            );
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
+            const result = await contractInstance.getSenderBalance( {from: alice} );
+            assert.equal(String(result), "20000000000000000");
         })
     })
 

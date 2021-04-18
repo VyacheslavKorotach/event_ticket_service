@@ -72,6 +72,14 @@ contract TicketOffice is EventFactory {
     }
 
     /**
+     * @dev Gets the 'msg.sender' balance in the system. It's money (wei) collected for the
+     * sold tickets (that could be withdrawn by 'withdraw').
+     */
+    function getSenderBalance() external view returns(uint) {
+        return (balances[msg.sender]);
+    }
+
+    /**
      * @dev Withdraws money (Ether) for the sold 'eventId' tickets to the 'eventId' Organizer.
      * Task #2 - Organizers can sell tickets and accept payments using Ether.
      *
