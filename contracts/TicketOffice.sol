@@ -102,4 +102,3 @@ contract TicketOffice is EventFactory {
         return result;
     }
 }
-}
