@@ -127,7 +127,7 @@ contract("TicketOffice", (accounts) => {
             await contractInstance.ticketTransfer("1", alice,  {from: bob})
             const result = await contractInstance.getOwnerTickets(alice,  {from: bob})
             console.log(String(result[0]));
-            assert.equal(String(result.receipt[0]), "1");
+            assert.equal(String(result[0]), "1");
         })
     })
 
