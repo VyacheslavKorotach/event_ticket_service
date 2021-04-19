@@ -55,9 +55,9 @@ contract("TicketOffice", (accounts) => {
             eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
         );
         await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-        const result = await contractInstance.checkTicket("1", "1", bob, {from: alice})
-        assert.equal(result, true);
-        // console.log(result5);
+        const result = await contractInstance.checkTicket("1", bob, {from: alice})
+        assert.equal(String(result), "1");
+        // console.log(result);
     })
 
     context("should be able to withdraw ETH for the sold tickets", async () => {
@@ -70,7 +70,7 @@ contract("TicketOffice", (accounts) => {
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
             const result = await contractInstance.withdraw("1", {from: alice})
             assert.equal(result.receipt.status, true);
-            // console.log(result7);
+            // console.log(result);
         })
 
         it("3-d person should not be might withdraw ETH", async () => {

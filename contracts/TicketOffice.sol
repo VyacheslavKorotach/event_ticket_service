@@ -9,7 +9,7 @@ contract TicketOffice is EventFactory {
     event NewTicketSold(uint eventId, uint ticketId, address to);
     event TicketTransfered(uint ticketId, address to);
 
-    mapping (uint => uint) public ticketToEvent;
+    mapping (uint => uint) public ticketToEvent; // For which event each ticket is issued 
     mapping (address => uint) public balances; // Here are the balances of collected money for the solved tickets
 
     /**
@@ -48,13 +48,17 @@ contract TicketOffice is EventFactory {
     }
 
     /**
-     * @dev Returns true if the 'ticketId' owned by the 'owner' and 'tickedId' issued to 'eventId'
+     * @dev Returns 'ticketId' of the first ticket owned by the 'owner' issued to 'eventId' or '0' if
+     * 'owner' has no any ticket to the 'eventId' event.
      * Task #3 - Organizers can validate user tickets.
      */
-    function checkTicket(uint eventId, uint ticketId, address owner) external view returns (bool) {
-        require(ticketOwnerOf(ticketId) == owner);
-        require(ticketToEvent[ticketId] == eventId);
-        return true;
+    function checkTicket(uint eventId, address owner) external view returns (uint) {
+        for (uint i = 1; i <= totalTicketCount; i++) {
+            if (ownerOf(i) == owner && ticketToEvent[i] == eventId) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     /**
