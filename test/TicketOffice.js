@@ -57,6 +57,8 @@ contract("TicketOffice", (accounts) => {
         await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
         const result = await contractInstance.checkTicket("1", bob, {from: alice})
         assert.equal(String(result), "1");
+        const result1 = await contractInstance.checkTicket("1", alice, {from: alice})
+        assert.equal(String(result1), "0");
         // console.log(result);
     })
 
