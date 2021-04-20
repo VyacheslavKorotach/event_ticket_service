@@ -132,6 +132,9 @@ contract("TicketOffice", (accounts) => {
             const result2 = await contractInstance.balanceOf(bob,  {from: bob});
             console.log("balanceOf bob: " + String(result2));
             console.log(result);
+            console.log(String(result[0]));
+            console.log(String(result[1]));
+            console.log(String(result[2]));
             assert.equal(String(result[0]), "1");
             assert.equal(String(result[1], "2"));
         })
