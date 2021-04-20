@@ -136,7 +136,8 @@ contract("TicketOffice", (accounts) => {
             console.log(String(result[1]));
             console.log(String(result[2]));
             assert.equal(String(result[0]), "1");
-            assert.equal(String(result[1], "2"));
+            assert.equal(String(result[1]), "2");
+            assert.equal(String(result[2]), "3");
         })
 
         it("owner should be able to get the msg.sender earned balance", async () => {
