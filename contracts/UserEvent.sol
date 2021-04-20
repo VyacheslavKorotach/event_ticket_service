@@ -23,7 +23,7 @@ contract UserEvent is ERC721 {
 
     eventDetails[] public events;
 
-    constructor() ERC721("EventTicketService", "ETC") {
+    constructor() ERC721("EventTicketService", "ETS") {
         totalEventCount = 0;
         activeEventCount = 0;
         totalTicketCount = 0;
