@@ -124,12 +124,14 @@ contract("TicketOffice", (accounts) => {
                 eventNames[0], eventDescriptions[0], eventLocations[0], eventStartDates[0],
                 eventEndDates[0], eventTicketPrices[0], eventTotalTickets[0], {from: alice}
             );
-            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"})
-            await contractInstance.ticketTransfer("1", alice,  {from: bob})
-            const result = await contractInstance.getOwnerTickets(alice,  {from: bob})
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
+            // await contractInstance.ticketTransfer("1", alice,  {from: bob})
+            const result = await contractInstance.getOwnerTickets(bob,  {from: bob});
+            const result2 = await contractInstance.balanceOf(bob,  {from: bob});
+            console.log("balanceOf bob: " + String(result2));
             assert.equal(String(result[0]), "1");
-            assert.equal(String(result[1], "2"))
+            assert.equal(String(result[1], "2"));
         })
 
         it("owner should be able to get the msg.sender earned balance", async () => {
