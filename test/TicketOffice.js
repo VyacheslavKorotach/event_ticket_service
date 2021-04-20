@@ -129,6 +129,7 @@ contract("TicketOffice", (accounts) => {
             await contractInstance.ticketTransfer("1", alice,  {from: bob})
             const result = await contractInstance.getOwnerTickets(alice,  {from: bob})
             assert.equal(String(result[0]), "1");
+            assert.equal(String(result[1], "2"))
         })
 
         it("owner should be able to get the msg.sender earned balance", async () => {
