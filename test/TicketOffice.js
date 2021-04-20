@@ -126,10 +126,12 @@ contract("TicketOffice", (accounts) => {
             );
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
             await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
+            await contractInstance.buyTicket("1", {from: bob, value: "10000000000000000"});
             // await contractInstance.ticketTransfer("1", alice,  {from: bob})
             const result = await contractInstance.getOwnerTickets(bob,  {from: bob});
             const result2 = await contractInstance.balanceOf(bob,  {from: bob});
             console.log("balanceOf bob: " + String(result2));
+            console.log(result);
             assert.equal(String(result[0]), "1");
             assert.equal(String(result[1], "2"));
         })
