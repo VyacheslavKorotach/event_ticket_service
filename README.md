@@ -10,3 +10,5 @@ The Use Cases are in the docs folder
 The tests are in the tests folder
 
 Connection to metamask and more convenient front is under development
+For new version of web application follow the link http://tickets.korotach.com:8000/
+New contract address in the Ropsten network is: 0xcEF33c7D9057c47FDDd86B130a8DcD0c18EEF509
